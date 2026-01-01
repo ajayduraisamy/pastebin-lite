@@ -17,7 +17,8 @@ export async function GET(
     return Response.json({ error: "Paste not found" }, { status: 404 });
   }
 
-  const currentTime = now();
+ const currentTime = await now();
+
 
   // TTL check
   if (paste.ttl_seconds) {

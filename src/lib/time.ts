@@ -1,10 +1,11 @@
 import { headers } from "next/headers";
 
-export function now(): number {
+export async function now(): Promise<number> {
   if (process.env.TEST_MODE === "1") {
-    const h = headers();
+    const h = await headers();
     const testNow = h.get("x-test-now-ms");
     if (testNow) return Number(testNow);
   }
+
   return Date.now();
 }

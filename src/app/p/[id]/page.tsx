@@ -1,13 +1,13 @@
 import { redis } from "@/lib/redis";
 import { now } from "@/lib/time";
 import { notFound } from "next/navigation";
+import RefreshButton from "./RefreshButton";
 
 export default async function PastePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
- 
   const { id } = await params;
 
   const key = `paste:${id}`;
@@ -18,7 +18,8 @@ export default async function PastePage({
     notFound();
   }
 
-  const currentTime = now();
+  const currentTime = await now();
+
 
   // TTL check
   if (paste.ttl_seconds) {
@@ -38,29 +39,20 @@ export default async function PastePage({
   }
 
   return (
-    <main
-      style={{
-        padding: "24px",
-        maxWidth: "800px",
-        margin: "0 auto",
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
-      <h1>Paste</h1>
+    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-3xl bg-white shadow-xl rounded-xl p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold text-gray-800">
+            Paste
+          </h1>
 
-    
-      <pre
-        style={{
-          whiteSpace: "pre-wrap",
-          wordBreak: "break-word",
-          backgroundColor: "#f4f4f4",
-          padding: "16px",
-          borderRadius: "6px",
-          marginTop: "16px",
-        }}
-      >
-        {paste.content}
-      </pre>
+          <RefreshButton />
+        </div>
+
+        <pre className="whitespace-pre-wrap break-words bg-gray-100 p-4 rounded-md text-gray-800">
+          {paste.content}
+        </pre>
+      </div>
     </main>
   );
 }
